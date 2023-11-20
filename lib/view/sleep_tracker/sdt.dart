@@ -50,5 +50,5 @@ class _ProfileViewState extends State<ProfileView> {
 
 
 
-git config --global user.email "applebits23@gmail.com"
-  git config --global user.name "violetEclipse"
+// git config --global user.email "applebits23@gmail.com"
+//   git config --global user.name "violetEclipse"
