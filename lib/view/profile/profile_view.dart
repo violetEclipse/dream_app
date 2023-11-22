@@ -116,7 +116,7 @@ class _ProfileViewState extends State<ProfileView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Stefani Wong",
+                              "Dream © 2023  Inc.",
                               style: TextStyle(
                                 color: TColor.black,
                                 fontSize: 14,
@@ -124,7 +124,7 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                             ),
                             Text(
-                              "Lose a Fat Program",
+                              "health sleep",
                               style: TextStyle(
                                 color: TColor.gray,
                                 fontSize: 12,
