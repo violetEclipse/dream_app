@@ -6,7 +6,6 @@ import '../../common_widget/round_button.dart';
 import '../../common_widget/setting_row.dart';
 import '../../common_widget/title_subtitle_cell.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 // TitleSubtitleCell remains the same...
@@ -15,16 +14,13 @@ class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
-  _ProfileViewState createState() => _ProfileViewState(
-    
-  );
-
+  _ProfileViewState createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
   late Future<List<Map<String, dynamic>>> personData;
   late Timer timer;
-  List accountArr = [
+   List accountArr = [
     {"image": "assets/img/p_personal.png", "name": "Personal Data", "tag": "1"},
     {"image": "assets/img/p_achi.png", "name": "Achievement", "tag": "2"},
     {
@@ -66,7 +62,17 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<List<Map<String, dynamic>>> fetchPersonData() async {
     final response =
+  // 888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+  // 888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+  // 888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
         await http.get(Uri.parse('http://192.168.43.215:8000/api/persons'));
+
+
+
+
+
+
+
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
@@ -78,48 +84,25 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    bool positive = false;;
     return Scaffold(
-      backgroundColor: TColor.white,
-      
-      appBar: AppBar(
-        backgroundColor: TColor.white,
-        centerTitle: true,
-        elevation: 0,
-        leadingWidth: 0,
-        title: Text(
-          "Profile",
-          style: TextStyle(
-              color: TColor.black, fontSize: 16, fontWeight: FontWeight.w700),
-        ),
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: TColor.lightGray,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Image.asset(
-                "assets/img/more_btn.png",
-                width: 15,
-                height: 15,
-                fit: BoxFit.contain,
-              ),
-            ),
-          )
-        ],
-      ),
+    
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: personData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text('No data available'));
+            } else {
+              List<Map<String, dynamic>> persons = snapshot.data!;
+              bool positive = false;;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                   Row(
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(30),
@@ -174,38 +157,31 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   )
                 ],
-              ),
+              ),  
+             
               const SizedBox(
                 height: 15,
               ),
-              const Row(
-                children: [
-                  Expanded(
-                    child: TitleSubtitleCell(
-                      title: "180cm",
-                      subtitle: "Height",
-                    ),
+
+// 88888888888888888888888888888888888888888888888888
+
+                 
+                  Row(
+                    children: persons.map((person) {
+                      return Expanded(
+                        child: TitleSubtitleCell(
+                          title: person['height'].toString(), // Replace with the appropriate field
+                          subtitle: person['name'].toString(), // Replace with the appropriate field
+                        ),
+                      );
+
+                    }).toList(),
                   ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: TitleSubtitleCell(
-                      title: "65kg",
-                      subtitle: "Weight",
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: TitleSubtitleCell(
-                      title: "22yo",
-                      subtitle: "Age",
-                    ),
-                  ),
-                ],
-              ),
+                  // 
+                  
+
+// 8888888888888888888888888888888888888888888888888888888
+
               const SizedBox(
                 height: 25,
               ),
@@ -248,6 +224,10 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               ),
+
+
+
+
               const SizedBox(
                 height: 25,
               ),
@@ -355,6 +335,9 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               ),
+
+
+
               const SizedBox(
                 height: 25,
               ),
@@ -398,52 +381,15 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               )
-            ],
-          ),
+
+
+                  //Your remaining code...
+                ],
+              );
+            }
+          },
         ),
       ),
-      
-      // body: SingleChildScrollView(
-      
-        
-
-
-      //   child: FutureBuilder<List<Map<String, dynamic>>>(
-      //     future: personData,
-      //     builder: (context, snapshot) {
-      //       if (snapshot.connectionState == ConnectionState.waiting) {
-      //         return Center(child: CircularProgressIndicator());
-      //       } else if (snapshot.hasError) {
-      //         return Center(child: Text('Error: ${snapshot.error}'));
-      //       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      //         return Center(child: Text('No data available'));
-      //       } else {
-      //         List<Map<String, dynamic>> persons = snapshot.data!;
-      //         return Column(
-      //           crossAxisAlignment: CrossAxisAlignment.stretch,
-      //           children: [
-      //             // Your existing code...
-      //             // For each person data, create a TitleSubtitleCell
-      //             Row(
-      //               children: persons.map((person) {
-      //                 return Expanded(
-      //                   child: TitleSubtitleCell(
-      //                     title: person['height'].toString(), // Replace with the appropriate field
-      //                     subtitle: person['name'].toString(), // Replace with the appropriate field
-      //                   ),
-      //                 );
-      //               }).toList(),
-      //             ),
-      //             // Your remaining code...
-      //           ],
-      //         );
-      //       }
-      //     },   
-      //   ),
-
-
-      //// xxxxxxxxxxxxxxxxxxxxx
-      // ),
     );
   }
 }
